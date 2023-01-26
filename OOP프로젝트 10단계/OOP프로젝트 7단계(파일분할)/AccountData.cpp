@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include "exception_class.h"
 #pragma warning (disable : 4996)
 using namespace std;
 
@@ -11,8 +12,14 @@ AccountData::AccountData(int ID, int money, String name) : accID(ID), balance(mo
 }
 
 
-void AccountData::Deposit(int money) {
+void AccountData::Deposit(int money) throw (DepositException) {
 
+	if (money < 0) {
+
+		DepositException expn(money);
+		throw expn;
+
+	}
 	cout << "AccountData::Deposit" << endl;
 	balance += money;
 
@@ -21,11 +28,14 @@ void AccountData::Deposit(int money) {
 int AccountData::GetAccID() const { return accID; } // accID를 리턴받는 겟함수 정의
 
 
-int AccountData::WithDraw(int money)
+int AccountData::WithDraw(int money) throw(WithDrawException)
 {
-	if (balance < money)
-		return 0;
+	if (balance < money) {
 
+		throw WithDrawException(balance);
+		return 0;
+	}
+		
 	balance -= money;
 	return money;
 

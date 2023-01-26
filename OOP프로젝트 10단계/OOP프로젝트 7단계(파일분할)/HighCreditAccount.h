@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "exception_class.h"
 using namespace std;
 
 #include "NormalAccount.h"

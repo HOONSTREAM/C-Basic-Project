@@ -3,6 +3,7 @@
 #include "HighCreditAccount.h"
 #include "NormalAccount.h"
 #include "String.h"
+#include "exception_class.h"
 
 
 AccountHandler::AccountHandler() : cusnum(0) {}
@@ -18,10 +19,13 @@ void AccountHandler::MakeAccount() {
 
 	if (sel == NORMAL)
 		MakeNormalAccount();
-	else
+	else if (sel == CREDIT)
 	{
 		MakeCreditAccount();
 	}
+	else
+		cout << "잘못된 접근입니다. 프로그램을 종료합니다.";
+		exit(1);
 
 
 
@@ -34,16 +38,23 @@ void AccountHandler::MakeNormalAccount() {
 	int balance;
 	int ratio;
 
-	cout << " [계좌 개설] " << endl;
-	cout << " 계좌 ID : "; cin >> id;
-	cout << " 이름 : "; cin >> name;
-	cout << "입금 액 : "; cin >> balance;
-	cout << "이자율(%) : "; cin >> ratio;
-	cout << endl;
+		cout << " [계좌 개설] " << endl;
+		cout << " 계좌 ID : "; cin >> id;
+		cout << " 이름 : "; cin >> name;
+		cout << "입금 액 : "; cin >> balance;
+		cout << "이자율(%) : "; cin >> ratio;
+		cout << endl;
+		
+		if (balance < 0) {
 
+			cout << "입금액이 마이너스가 될 수 없습니다. 프로그램을 종료합니다.";
 
-	cuslist[cusnum++] = new NormalAccount(id, balance, name, ratio);
-
+			exit(1);
+		}
+	
+			cuslist[cusnum++] = new NormalAccount(id, balance, name, ratio);
+		
+		
 
 }
 
@@ -63,6 +74,13 @@ void AccountHandler::MakeCreditAccount() {
 	cout << "이자율(%) : "; cin >> ratio;
 	cout << "신용 등급 (1 = A , 2 = B , 3 = C ) : ";
 	cin >> creditlevel;
+
+	if (balance < 0) {
+
+		cout << "입금액이 마이너스가 될 수 없습니다. 프로그램을 종료합니다.";
+
+		exit(1);
+	}
 
 	switch (creditlevel) {
 
@@ -110,8 +128,16 @@ void AccountHandler::DepositMoney() {
 
 		if (cuslist[k]->GetAccID() == id) {  //a -> b 는 (*a).b와 동일합니다. , accArr가 객체 포인터 배열로 선언되었기 때문에 .. 
 
-			cuslist[k]->Deposit(money);
-			cout << "입금완료" << endl;
+			try {
+				cuslist[k]->Deposit(money);
+				cout << "입금완료" << endl;
+			}
+			catch (DepositException& expn) {
+
+				expn.ShowExceptionReason();
+
+			}
+			
 			return;
 
 		}
@@ -133,12 +159,16 @@ void AccountHandler::WithdrawMoney() {
 
 		if (cuslist[i]->GetAccID() == id)
 		{
-			if (cuslist[i]->WithDraw(money) == 0) { //함수를 실행했을 때 0이 반환되면 
-				cout << "잔액 부족" << endl << endl;
-				return;
+			try{
+				cuslist[i]->WithDraw(money);
+				cout << "출금 완료" << endl << endl;
+			}
+			catch (WithDrawException& expn) {
+
+				expn.ShowExceptionReason();
 			}
 
-			cout << "출금 완료" << endl << endl;
+			
 			return;
 
 		}

@@ -143,6 +143,7 @@
     <ClInclude Include="AccountHandler.h" />
     <ClInclude Include="BankingCommonDec1.h" />
     <ClInclude Include="BoundCheckArray Template.h" />
+    <ClInclude Include="exception_class.h" />
     <ClInclude Include="HighCreditAccount.h" />
     <ClInclude Include="NormalAccount.h" />
     <ClInclude Include="String.h" />

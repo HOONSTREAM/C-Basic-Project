@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AccountData.h"
+#include "exception_class.h"
 
 
 class NormalAccount : public AccountData {
