@@ -1,46 +1,64 @@
 #include <iostream>
 using namespace std;
 
-class Funcobject {
+class Array {
 
-public :
+private :
+	int* arr;
+	int size;
+	int capacity;
+	Array(const Array& copy) {}
+	Array& operator= (const Array& ref) {}
+	//배열은 저장소의 일종이고, 저장소에 저장된 데이터는 '유일성'이 보장되어야 하기 때문에, 
+	//대부분의 경우 저장소의 복사는 불필요하거나 잘못된 일로 간주된다. 
 
-	void operator() (int arg) const {
+public:
+	Array(int cap = 100) :capacity(cap), size(0),arr(0) {
 
-		cout << "정수 : " << arg << endl;
+		arr = new int[capacity];
+	}
+
+	~Array() {
+
+		delete[]arr;
 
 	}
 
-	void operator() (int arg, int arg2) const {
+	void Add(int data) {
 
-		cout << "정수 : " << arg << "," << arg2 << endl;
+		if (size < capacity)
+			arr[size++] = data;
 	}
 
-	void operator() (int arg, int arg2, int arg3) {
+	int Size() const { return size; }
 
-		cout << "정수 : " << arg << "," << arg2 << "," << arg3 << endl;
+
+	int operator[] (int idx) const {
+
+		return arr[idx];
+
+	}
+
+	int& operator[] (int idx) {
+
+		return arr[idx];
+
 	}
 };
 
 int main(void) {
 
-	Funcobject print;
-	//암시적 호출
-	print(10);
-	print(10, 20);
-	print(10, 20, 30);
+	Array ar(10);
 
-	cout << endl;
-	// 명시적 호출
-	print.operator()(10);
-	print.operator()(10, 20);
-	print.operator()(10, 20, 30);
+	ar.Add(10);
+	ar.Add(20);
+	ar.Add(30);
 
-	cout << endl;
-	 //임시객체 생성 후 호출
-	Funcobject()(10);
-	Funcobject()(10, 20);
-	Funcobject()(10, 20, 30);
+	cout << ar[0] << endl;
+
+	ar[0] = 100;
+
+	cout << ar[0] << endl;
 
 	return 0;
 
